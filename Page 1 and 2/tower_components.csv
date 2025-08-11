@@ -1,0 +1,201 @@
+AMSAssetRef,Component,CorrosionDescription,Height,CorrosionRegionType
+NSW0000001_STR_1,Tower Leg,Heavy Corrosion,50.0,Coastal
+NSW0000001_STR_1,Anti-climb device,Light Corrosion,50.0,Coastal
+NSW0000001_STR_1,Bird netting,Rust,50.0,Coastal
+NSW0000001_STR_1,Gantry bolts,Bubbled Corrosion,50.0,Coastal
+NSW0000002_STR_1,Concrete base,No Corrosion,45.5,Coastal
+NSW0000002_STR_1,Antenna mount,Signs of Corrosion,45.5,Coastal
+NSW0000002_STR_1,Feeder cable,Light Corrosion,45.5,Coastal
+NSW0000002_STR_1,Brace,Rust,45.5,Coastal
+NSW0000003_STR_1,Tower Leg,Bubbled Corrosion,55.0,Coastal
+NSW0000003_STR_1,Chain link,No Corrosion,55.0,Coastal
+NSW0000003_STR_1,Platform handrail,Heavy Corrosion,55.0,Coastal
+NSW0000003_STR_1,Earth strap,Signs of Corrosion,55.0,Coastal
+NSW0000004_STR_1,Base plate,Light Corrosion,48.0,Coastal
+NSW0000004_STR_1,Antenna mounting bracket,Rust,48.0,Coastal
+NSW0000004_STR_1,Horizontal gantry,Bubbled Corrosion,48.0,Coastal
+NSW0000004_STR_1,Splice plate,No Corrosion,48.0,Coastal
+NSW0000005_STR_1,Tower Leg,Signs of Corrosion,52.5,Coastal
+NSW0000005_STR_1,Guy wire,Heavy Corrosion,52.5,Coastal
+NSW0000005_STR_1,Platform bolts,Light Corrosion,52.5,Coastal
+NSW0000005_STR_1,Cable hanger,Rust,52.5,Coastal
+NSW0000006_STR_1,Foundation bolts,Bubbled Corrosion,47.0,Coastal
+NSW0000006_STR_1,Anti-climb barb wire,No Corrosion,47.0,Coastal
+NSW0000006_STR_1,Antenna dishes,Signs of Corrosion,47.0,Coastal
+NSW0000006_STR_1,Brace,Heavy Corrosion,47.0,Coastal
+NSW0000007_STR_1,Tower Leg,Light Corrosion,49.0,Coastal
+NSW0000007_STR_1,Climbing pegs,Rust,49.0,Coastal
+NSW0000007_STR_1,Gantry cover,Bubbled Corrosion,49.0,Coastal
+NSW0000007_STR_1,Earth pit,No Corrosion,49.0,Coastal
+NSW0000008_STR_1,Concrete footing,Signs of Corrosion,51.0,Coastal
+NSW0000008_STR_1,Antenna clamp,Heavy Corrosion,51.0,Coastal
+NSW0000008_STR_1,Platform mesh,Light Corrosion,51.0,Coastal
+NSW0000008_STR_1,Guy shackle bolts,Rust,51.0,Coastal
+NSW0000009_STR_1,Tower Leg,Bubbled Corrosion,46.5,Coastal
+NSW0000009_STR_1,Chain mesh,No Corrosion,46.5,Coastal
+NSW0000009_STR_1,Horizontal gantry pole,Signs of Corrosion,46.5,Coastal
+NSW0000009_STR_1,Brace,Heavy Corrosion,46.5,Coastal
+NSW0000010_STR_1,Base of tower,Light Corrosion,53.0,Coastal
+NSW0000010_STR_1,Antenna mounting pipe,Rust,53.0,Coastal
+NSW0000010_STR_1,Gantry splice plates,Bubbled Corrosion,53.0,Coastal
+NSW0000010_STR_1,Earth ring,No Corrosion,53.0,Coastal
+NSW0000011_STR_1,Tower Leg,Signs of Corrosion,48.5,Coastal
+NSW0000011_STR_1,Bird protecting covers,Heavy Corrosion,48.5,Coastal
+NSW0000011_STR_1,Platform frame,Light Corrosion,48.5,Coastal
+NSW0000011_STR_1,Cable support brackets,Rust,48.5,Coastal
+NSW0000012_STR_1,Concrete slab,Bubbled Corrosion,50.5,Coastal
+NSW0000012_STR_1,Antenna mounting steel,No Corrosion,50.5,Coastal
+NSW0000012_STR_1,Gantry legs,Signs of Corrosion,50.5,Coastal
+NSW0000012_STR_1,Brace,Heavy Corrosion,50.5,Coastal
+NSW0000013_STR_1,Tower Leg,Light Corrosion,47.5,Coastal
+NSW0000013_STR_1,Guy anchor,Rust,47.5,Coastal
+NSW0000013_STR_1,Platform grid mesh,Bubbled Corrosion,47.5,Coastal
+NSW0000013_STR_1,Earth spike,No Corrosion,47.5,Coastal
+NSW0000014_STR_1,Foundation concrete,Signs of Corrosion,54.0,Coastal
+NSW0000014_STR_1,Antenna support,Heavy Corrosion,54.0,Coastal
+NSW0000014_STR_1,Gantry post,Light Corrosion,54.0,Coastal
+NSW0000014_STR_1,Cable hanger bolts,Rust,54.0,Coastal
+NSW0000015_STR_1,Tower Leg,Bubbled Corrosion,49.5,Coastal
+NSW0000015_STR_1,Chain wire,No Corrosion,49.5,Coastal
+NSW0000015_STR_1,Horizontal gantry lid,Signs of Corrosion,49.5,Coastal
+NSW0000015_STR_1,Brace,Heavy Corrosion,49.5,Coastal
+NSW0000016_STR_1,Base plate bolts,Light Corrosion,51.5,Coastal
+NSW0000016_STR_1,Antenna mount bolts,Rust,51.5,Coastal
+NSW0000016_STR_1,Gantry members,Bubbled Corrosion,51.5,Coastal
+NSW0000016_STR_1,Earth braid,No Corrosion,51.5,Coastal
+NSW0000017_STR_1,Tower Leg,Signs of Corrosion,46.0,Coastal
+NSW0000017_STR_1,Anti-climb skirt,Heavy Corrosion,46.0,Coastal
+NSW0000017_STR_1,Platform nuts,Light Corrosion,46.0,Coastal
+NSW0000017_STR_1,Cable stringers,Rust,46.0,Coastal
+NSW0000018_STR_1,Concrete plinth,Bubbled Corrosion,52.0,Coastal
+NSW0000018_STR_1,Antenna mounting clamp,No Corrosion,52.0,Coastal
+NSW0000018_STR_1,Gantry mesh,Signs of Corrosion,52.0,Coastal
+NSW0000018_STR_1,Brace,Heavy Corrosion,52.0,Coastal
+NSW0000019_STR_1,Tower Leg,Light Corrosion,48.0,Coastal
+NSW0000019_STR_1,Guy rope,Rust,48.0,Coastal
+NSW0000019_STR_1,Platform sheet,Bubbled Corrosion,48.0,Coastal
+NSW0000019_STR_1,Earth pit lid,No Corrosion,48.0,Coastal
+NSW0000020_STR_1,Foundation cage,Signs of Corrosion,50.0,Coastal
+NSW0000020_STR_1,Antenna mounting U-bolts,Heavy Corrosion,50.0,Coastal
+NSW0000020_STR_1,Gantry braces,Light Corrosion,50.0,Coastal
+NSW0000020_STR_1,Cable hanger stand off bracket,Rust,50.0,Coastal
+NSW0000021_STR_1,Tower Leg,Bubbled Corrosion,47.0,Coastal
+NSW0000021_STR_1,Chainlink mesh,No Corrosion,47.0,Coastal
+NSW0000021_STR_1,Horizontal gantry cover,Signs of Corrosion,47.0,Coastal
+NSW0000021_STR_1,Brace,Heavy Corrosion,47.0,Coastal
+NSW0000022_STR_1,Base of structure,Light Corrosion,53.5,Coastal
+NSW0000022_STR_1,Antenna pipe mount,Rust,53.5,Coastal
+NSW0000022_STR_1,Gantry splice bolts,Bubbled Corrosion,53.5,Coastal
+NSW0000022_STR_1,Earth ring/halo,No Corrosion,53.5,Coastal
+NSW0000023_STR_1,Tower Leg,Signs of Corrosion,49.0,Coastal
+NSW0000023_STR_1,Bird netting,Heavy Corrosion,49.0,Coastal
+NSW0000023_STR_1,Platform hold down bolts,Light Corrosion,49.0,Coastal
+NSW0000023_STR_1,Cable support brackets,Rust,49.0,Coastal
+NSW0000024_STR_1,Concrete foundation,Bubbled Corrosion,51.0,Coastal
+NSW0000024_STR_1,Antenna mounting bar,No Corrosion,51.0,Coastal
+NSW0000024_STR_1,Gantry components,Signs of Corrosion,51.0,Coastal
+NSW0000024_STR_1,Brace,Heavy Corrosion,51.0,Coastal
+NSW0000025_STR_1,Tower Leg,Light Corrosion,46.5,Coastal
+NSW0000025_STR_1,Guy swage,Rust,46.5,Coastal
+NSW0000025_STR_1,Platform brace,Bubbled Corrosion,46.5,Coastal
+NSW0000025_STR_1,Earth strap/cable,No Corrosion,46.5,Coastal
+NSW0000026_STR_1,Foundation footings,Signs of Corrosion,52.0,Coastal
+NSW0000026_STR_1,Antenna support structure,Heavy Corrosion,52.0,Coastal
+NSW0000026_STR_1,Gantry pole,Light Corrosion,52.0,Coastal
+NSW0000026_STR_1,Cable hanger bolts,Rust,52.0,Coastal
+NSW0000027_STR_1,Tower Leg,Bubbled Corrosion,48.5,Coastal
+NSW0000027_STR_1,Anti-climb,No Corrosion,48.5,Coastal
+NSW0000027_STR_1,Horizontal gantry post,Signs of Corrosion,48.5,Coastal
+NSW0000027_STR_1,Brace,Heavy Corrosion,48.5,Coastal
+NSW0000028_STR_1,Base plate,Light Corrosion,50.5,Coastal
+NSW0000028_STR_1,Antenna mounting steel bolts,Rust,50.5,Coastal
+NSW0000028_STR_1,Gantry lids,Bubbled Corrosion,50.5,Coastal
+NSW0000028_STR_1,Earth rod,No Corrosion,50.5,Coastal
+NSW0000029_STR_1,Tower Leg,Signs of Corrosion,47.5,Coastal
+NSW0000029_STR_1,Guy cable,Heavy Corrosion,47.5,Coastal
+NSW0000029_STR_1,Platform floor,Light Corrosion,47.5,Coastal
+NSW0000029_STR_1,Cable tray,Rust,47.5,Coastal
+NSW0000030_STR_1,Concrete pad,Bubbled Corrosion,54.0,Coastal
+NSW0000030_STR_1,Antenna mounting bracket,Signs of Corrosion,54.0,Coastal
+NSW0000030_STR_1,Gantry support,Heavy Corrosion,54.0,Coastal
+NSW0000030_STR_1,Brace,Light Corrosion,54.0,Coastal
+NSW0000031_STR_1,Tower Leg,No Corrosion,49.5,Coastal
+NSW0000031_STR_1,Chain link,Signs of Corrosion,49.5,Coastal
+NSW0000031_STR_1,Horizontal gantry support,Heavy Corrosion,49.5,Coastal
+NSW0000031_STR_1,Earth strap connection,Bubbled Corrosion,49.5,Coastal
+NSW0000032_STR_1,Foundation slabs,Rust,51.5,Coastal
+NSW0000032_STR_1,Antenna mounting pipe,Light Corrosion,51.5,Coastal
+NSW0000032_STR_1,Gantry support post,No Corrosion,51.5,Coastal
+NSW0000032_STR_1,Cable hanger,Signs of Corrosion,51.5,Coastal
+NSW0000033_STR_1,Tower Leg,Heavy Corrosion,46.0,Coastal
+NSW0000033_STR_1,Anti-climb barbed wire,Bubbled Corrosion,46.0,Coastal
+NSW0000033_STR_1,Platform handrail,Rust,46.0,Coastal
+NSW0000033_STR_1,Earth pit,Light Corrosion,46.0,Coastal
+NSW0000034_STR_1,Concrete base,No Corrosion,52.0,Coastal
+NSW0000034_STR_1,Antenna mount,Signs of Corrosion,52.0,Coastal
+NSW0000034_STR_1,Gantry components,Heavy Corrosion,52.0,Coastal
+NSW0000034_STR_1,Brace,Bubbled Corrosion,52.0,Coastal
+NSW0000035_STR_1,Tower Leg,Rust,48.0,Coastal
+NSW0000035_STR_1,Guy wire,Light Corrosion,48.0,Coastal
+NSW0000035_STR_1,Platform bolts,No Corrosion,48.0,Coastal
+NSW0000035_STR_1,Cable support brackets,Signs of Corrosion,48.0,Coastal
+NSW0000036_STR_1,Foundation bolts,Heavy Corrosion,50.0,Coastal
+NSW0000036_STR_1,Antenna mounting clamp,Bubbled Corrosion,50.0,Coastal
+NSW0000036_STR_1,Gantry braces,Rust,50.0,Coastal
+NSW0000036_STR_1,Earth braid,Light Corrosion,50.0,Coastal
+NSW0000037_STR_1,Tower Leg,No Corrosion,47.0,Coastal
+NSW0000037_STR_1,Chain mesh,Signs of Corrosion,47.0,Coastal
+NSW0000037_STR_1,Horizontal gantry cover,Heavy Corrosion,47.0,Coastal
+NSW0000037_STR_1,Brace,Bubbled Corrosion,47.0,Coastal
+NSW0000038_STR_1,Base of tower,Rust,53.5,Coastal
+NSW0000038_STR_1,Antenna mounting bar,Light Corrosion,53.5,Coastal
+NSW0000038_STR_1,Gantry splice plates,No Corrosion,53.5,Coastal
+NSW0000038_STR_1,Cable hanger bolts,Signs of Corrosion,53.5,Coastal
+NSW0000039_STR_1,Tower Leg,Heavy Corrosion,49.0,Coastal
+NSW0000039_STR_1,Bird netting,Bubbled Corrosion,49.0,Coastal
+NSW0000039_STR_1,Platform grid mesh,Rust,49.0,Coastal
+NSW0000039_STR_1,Earth ring,Light Corrosion,49.0,Coastal
+NSW0000040_STR_1,Concrete foundation,No Corrosion,51.0,Coastal
+NSW0000040_STR_1,Antenna mounting steel,Signs of Corrosion,51.0,Coastal
+NSW0000040_STR_1,Gantry pole,Heavy Corrosion,51.0,Coastal
+NSW0000040_STR_1,Brace,Bubbled Corrosion,51.0,Coastal
+NSW0000041_STR_1,Tower Leg,Rust,46.5,Coastal
+NSW0000041_STR_1,Guy anchor,Light Corrosion,46.5,Coastal
+NSW0000041_STR_1,Platform brace,No Corrosion,46.5,Coastal
+NSW0000041_STR_1,Cable tray,Signs of Corrosion,46.5,Coastal
+NSW0000042_STR_1,Foundation footings,Heavy Corrosion,52.0,Coastal
+NSW0000042_STR_1,Antenna support structure,Bubbled Corrosion,52.0,Coastal
+NSW0000042_STR_1,Gantry support,Rust,52.0,Coastal
+NSW0000042_STR_1,Earth strap/cable,Light Corrosion,52.0,Coastal
+NSW0000043_STR_1,Tower Leg,No Corrosion,48.5,Coastal
+NSW0000043_STR_1,Anti-climb,Signs of Corrosion,48.5,Coastal
+NSW0000043_STR_1,Horizontal gantry post,Heavy Corrosion,48.5,Coastal
+NSW0000043_STR_1,Brace,Bubbled Corrosion,48.5,Coastal
+NSW0000044_STR_1,Base plate,Rust,50.5,Coastal
+NSW0000044_STR_1,Antenna mounting steel bolts,Light Corrosion,50.5,Coastal
+NSW0000044_STR_1,Gantry lids,No Corrosion,50.5,Coastal
+NSW0000044_STR_1,Cable hanger,Signs of Corrosion,50.5,Coastal
+NSW0000045_STR_1,Tower Leg,Heavy Corrosion,47.5,Coastal
+NSW0000045_STR_1,Guy cable,Bubbled Corrosion,47.5,Coastal
+NSW0000045_STR_1,Platform floor,Rust,47.5,Coastal
+NSW0000045_STR_1,Earth rod,Light Corrosion,47.5,Coastal
+NSW0000046_STR_1,Concrete pad,No Corrosion,54.0,Coastal
+NSW0000046_STR_1,Antenna mounting bracket,Signs of Corrosion,54.0,Coastal
+NSW0000046_STR_1,Gantry support post,Heavy Corrosion,54.0,Coastal
+NSW0000046_STR_1,Brace,Bubbled Corrosion,54.0,Coastal
+NSW0000047_STR_1,Tower Leg,Rust,49.5,Coastal
+NSW0000047_STR_1,Chain link,Light Corrosion,49.5,Coastal
+NSW0000047_STR_1,Horizontal gantry support,No Corrosion,49.5,Coastal
+NSW0000047_STR_1,Earth strap connection,Signs of Corrosion,49.5,Coastal
+NSW0000048_STR_1,Foundation slabs,Heavy Corrosion,51.5,Coastal
+NSW0000048_STR_1,Antenna mounting pipe,Bubbled Corrosion,51.5,Coastal
+NSW0000048_STR_1,Gantry components,Rust,51.5,Coastal
+NSW0000048_STR_1,Cable support brackets,Light Corrosion,51.5,Coastal
+NSW0000049_STR_1,Tower Leg,No Corrosion,46.0,Coastal
+NSW0000049_STR_1,Anti-climb barbed wire,Signs of Corrosion,46.0,Coastal
+NSW0000049_STR_1,Platform handrail,Heavy Corrosion,46.0,Coastal
+NSW0000049_STR_1,Earth pit,Bubbled Corrosion,46.0,Coastal
+NSW0000050_STR_1,Concrete base,Rust,52.0,Coastal
+NSW0000050_STR_1,Antenna mount,Light Corrosion,52.0,Coastal
+NSW0000050_STR_1,Gantry braces,No Corrosion,52.0,Coastal
+NSW0000050_STR_1,Brace,Signs of Corrosion,52.0,Coastal
