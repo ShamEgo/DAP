@@ -40,19 +40,11 @@
       // Excludes axis from diagram
       x.domain(dimensions = d3.keys(myData[0]).filter(function(d) {
 
-<<<<<<< HEAD
-        var excludes = ["AMSAssetRef"];  
-        var ex = d != "id" && (excludes.indexOf(d) < 0);
-
-        // ordinal categories
-        if (["AMSAssetRef", "Latitude", "Longitude", "State", "SnowIceRegion", "CorrosionRegionType", "StructureClassCode", "Height", "PaintingType", "StructureLoadPercentage", "InspectionFrequency"].indexOf(d) >= 0) {
-=======
-        var excludes = ["AMSAssetRef", "Latitude", "Longitude"];  
+        var excludes = ["AMSAssetRef", "LatitudeLongitude"];  
         var ex = d != "id" && (excludes.indexOf(d) < 0);
 
         // ordinal categories
         if (["AMSAssetRef", "State", "SnowIceRegion", "CorrosionRegionType", "StructureClassCode", "PaintingType"].indexOf(d) >= 0) {
->>>>>>> ca1cff2 (With Map2)
           return ex &&
             (y[d] = d3.scale.ordinal()
             .domain(myData.map(function(p) { return p[d]; }))

@@ -1,30 +1,14 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html lang="en"><head>
-  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-  <title>parrallel_coordinates_all_info</title>
-  <!-- Leaflet CSS for map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"/>
-
-=======
 <html lang="en">
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
   <title>parrallel_coordinates_all_info</title>
 
   <!-- Original libs -->
->>>>>>> ca1cff2 (With Map2)
   <script type="text/javascript" src="files/d3.js"></script>
   <script type="text/javascript" src="files/d3_002.js"></script>
   <script type="text/javascript" src="files/d3_003.js"></script>
   <script type="text/javascript" src="files/parallel-coordinates.js"></script>
-<<<<<<< HEAD
-  <!-- Leaflet JS for map -->
-  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"></script>
-  <!-- Your dynamic map hookup -->
-  <script src="files/map.js"></script>
-=======
->>>>>>> ca1cff2 (With Map2)
 
   <script type="text/javascript" src="files/jquery_002.js"></script>
   <script type="text/javascript" src="files/underscore.js"></script>
@@ -45,42 +29,6 @@
   <script src="files/options.js"></script>
   <script src="files/data.js"></script>
   <link rel="stylesheet" href="files/style.css" type="text/css" charset="utf-8">
-<<<<<<< HEAD
-<style type="text/css" rel="stylesheet">.slickgrid_108761 .slick-header-column { left: 1000px; } .slickgrid_108761 .slick-top-panel { height:25px; } .slickgrid_108761 .slick-headerrow-columns { height:25px; } .slickgrid_108761 .slick-cell { height:22px; } .slickgrid_108761 .slick-row { width:1620px; height:25px; } .slickgrid_108761 .lr { float:none; position:absolute; } .slickgrid_108761 .l0 { left: 0px; } .slickgrid_108761 .r0 { right: 1300px; } .slickgrid_108761 .l1 { left: 320px; } .slickgrid_108761 .r1 { right: 1120px; } .slickgrid_108761 .l2 { left: 500px; } .slickgrid_108761 .r2 { right: 1040px; } .slickgrid_108761 .l3 { left: 580px; } .slickgrid_108761 .r3 { right: 960px; } .slickgrid_108761 .l4 { left: 660px; } .slickgrid_108761 .r4 { right: 880px; } .slickgrid_108761 .l5 { left: 740px; } .slickgrid_108761 .r5 { right: 800px; } .slickgrid_108761 .l6 { left: 820px; } .slickgrid_108761 .r6 { right: 720px; } .slickgrid_108761 .l7 { left: 900px; } .slickgrid_108761 .r7 { right: 640px; } .slickgrid_108761 .l8 { left: 980px; } .slickgrid_108761 .r8 { right: 560px; } .slickgrid_108761 .l9 { left: 1060px; } .slickgrid_108761 .r9 { right: 480px; } .slickgrid_108761 .l10 { left: 1140px; } .slickgrid_108761 .r10 { right: 400px; } .slickgrid_108761 .l11 { left: 1220px; } .slickgrid_108761 .r11 { right: 320px; } .slickgrid_108761 .l12 { left: 1300px; } .slickgrid_108761 .r12 { right: 240px; } .slickgrid_108761 .l13 { left: 1380px; } .slickgrid_108761 .r13 { right: 160px; } .slickgrid_108761 .l14 { left: 1460px; } .slickgrid_108761 .r14 { right: 80px; } .slickgrid_108761 .l15 { left: 1540px; } .slickgrid_108761 .r15 { right: 0px; }</style></head>
-
-<body>
-<div id="nav">
-  <h1>parrallel_coordinates_all_info - Parallel Coordinates</h1>
-  <div class="widget right toggle">
-	  <input min="0" max="1" value="0.75" step="0.01" name="power" list="powers" id="line_opacity" type="range">
-   <br>
-	  Opacity: <span id="opacity_level">75%</span>
-	</div>
-  <div><a href="#" id="shadows" class="right toggle">Shadows</a></div>
-  <div><a href="#" id="inverted" class="right toggle">Dark</a></div>
-  <div><a href="#" id="no_ticks" class="right toggle">Hide Ticks</a></div>
-  <p class="intro left clear">
-    parrallel_coordinates_all_info
-
-    information on parallel coordinates, read this <a href="http://eagereyes.org/techniques/parallel-coordinates">tutorial</a>.
-  </p>
-</div>
-<div id="main">
-  <div class="widgets">
-    <div id="totals" class="widget right">Total Selected<br><svg height="80" width="100"></svg></div>
-    <div id="pie" class="widget right">Group Breakdown<br><svg height="80" width="100"></svg></div>
-    <a href="#" id="export_selected" class="button green filter_control">Export</a>
-    <a href="#" id="remove_selected" class="button red filter_control">Remove</a>
-    <a href="#" id="keep_selected" class="button green filter_control">Keep</a>
-    <div id="pager" class="info"></div>
-    <div id="legend"></div>
-  </div>
-  <div id="parallel">
-  </div>
-  <div id="myGrid"></div>
-  <script type="text/javascript">
-
-=======
 
   <!-- Leaflet (dark map) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -171,7 +119,6 @@
   </div>
 
   <script type="text/javascript">
->>>>>>> ca1cff2 (With Map2)
   $(function() {
 
     var dimensions = new Filter();
@@ -182,21 +129,14 @@
     var columns = _(dataJSON[0]).keys();
     var axes = columns;
 
-<<<<<<< HEAD
-    var groups = ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"];
-    var colors = {"ACT": "#035ab6", "NSW": "#13241c", "NT": "#f14786", "QLD": "#afd514", "SA": "#95d311", "TAS": "#94d602", "VIC": "#59de3a", "WA": "#d332fa"};
-=======
     var groups = ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"];;
-    var colors = {"ACT": "#e03ed3", "NSW": "#741d70", "NT": "#a9fe04", "QLD": "#06b5f1", "SA": "#074f8b", "TAS": "#09a49b", "VIC": "#ef7087", "WA": "#f1c7f9"};;
->>>>>>> ca1cff2 (With Map2)
+    var colors = {"ACT": "#2d1a28", "NSW": "#a8c6d9", "NT": "#307952", "QLD": "#55ec08", "SA": "#7490c6", "TAS": "#e37985", "VIC": "#af6513", "WA": "#fcdb99"};;
 
     _(groups).each(function(group) {
       $('#legend').append("<div class='item'><div class='color' style='background: " + colors[group] + "';></div><div class='key'>" + group + "</div></div>");
     });
 
     var pc = parallel(dimensions, colors);
-<<<<<<< HEAD
-=======
 
     // ---------- MAP INTEGRATION (Leaflet) — debounced only ----------
     var LAT_FIELD, LON_FIELD;
@@ -269,7 +209,6 @@
     updateMap(dimensions.get('filtered') || dimensions.get('data') || []);
     // ---------- END MAP INTEGRATION ----------
 
->>>>>>> ca1cff2 (With Map2)
     var pie = piegroups(dataJSON, groups, colors, 'State');
     var totals = pietotals(
       ['in', 'out'],
@@ -283,31 +222,18 @@
       columns: columns
     });
 
-<<<<<<< HEAD
-    // vertical full screen
-    var parallel_height = $(window).height() - 64 - 12 - 120 - 320;
-    if (parallel_height < 120) parallel_height = 120;  // min height
-    //if (parallel_height > 400) parallel_height = 400;  // max height
-    $('#parallel').css({
-        height: parallel_height + 'px',
-        width: $(window).width() + 'px'
-=======
     // vertical full screen (width constrained by right pane)
     var parallel_height = $(window).height() - 64 - 12 - 120 - 320;
     if (parallel_height < 120) parallel_height = 120; // min height
     $('#parallel').css({
       height: parallel_height + 'px',
       width: '100%'
->>>>>>> ca1cff2 (With Map2)
     });
 
     slicky.update();
     pc.render();
 
-<<<<<<< HEAD
-=======
     // === Hook existing events to debounced map updates ===
->>>>>>> ca1cff2 (With Map2)
     dimensions.bind('change:filtered', function() {
       var data = dimensions.get('data');
       var filtered = dimensions.get('filtered');
@@ -316,12 +242,9 @@
       pie.update(filtered);
       totals.update([filtered_size, data_size - filtered_size]);
 
-<<<<<<< HEAD
-=======
       // Debounced map redraw
       updateMapDebounced(filtered);
 
->>>>>>> ca1cff2 (With Map2)
       var opacity = _([2/Math.pow(filtered_size,0.37), 100]).min();
       $('#line_opacity').val(opacity).change();
     });
@@ -329,8 +252,6 @@
     highlighter.bind('change:selected', function() {
       var highlighted = this.get('selected');
       pc.highlight(highlighted);
-<<<<<<< HEAD
-=======
 
       // Show selected point on map, else all filtered
       var rows = dimensions.get('filtered') || [];
@@ -339,7 +260,6 @@
       } else {
         updateMapDebounced([rows[highlighted]]);
       }
->>>>>>> ca1cff2 (With Map2)
     });
 
     $('#remove_selected').click(function() {
@@ -366,21 +286,9 @@
         csv += "\n";
         csv += _(keys).map(function(k) {
           var val = row[k];
-<<<<<<< HEAD
-          if (_.isString(val)) {
-            return '"' + addslashes(val) + '"';
-          }
-          if (_.isNumber(val)) {
-            return val;
-          }
-          if (_.isNull(val)) {
-            return "";
-          }
-=======
           if (_.isString(val)) return '"' + addslashes(val) + '"';
           if (_.isNumber(val)) return val;
           if (_.isNull(val)) return "";
->>>>>>> ca1cff2 (With Map2)
         }).join(",");
       });
       var uriContent = "data:application/octet-stream," + encodeURIComponent(csv);
@@ -395,61 +303,13 @@
       $('#opacity_level').html((Math.round(val*10000)/100) + "%");
     });
 
-<<<<<<< HEAD
-    $('#parallel').resize(function() {
-      // vertical full screen
-=======
     // Keep one resize handler for #parallel (no map resizing)
     $('#parallel').resize(function() {
->>>>>>> ca1cff2 (With Map2)
       pc.render();
       var val = $('#line_opacity').val();
       $('#parallel .foreground path').css('stroke-opacity', val.toString());
     });
 
-<<<<<<< HEAD
-    $('#parallel').resizable({
-      handles: 's',
-      resize: function () { return false; }
-    });
-
-    $('#myGrid').resizable({
-      handles: 's'
-    });
-
-    function addslashes( str ) {
-      return (str+'')
-        .replace(/\"/g, "\"\"")        // escape double quotes
-        .replace(/\0/g, "\\0");        // replace nulls with 0
-    };
-
-  });
-
-  </script>
-  <!--
-    <p>
-     Copyright 2011, Kai Chang
-    </p>
-    <p>
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-    </p>
-    <p>
-         http://www.apache.org/licenses/LICENSE-2.0
-    </p>
-    <p>
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
-	-->
-</div>
-
-
-</body></html>
-=======
     $('#parallel').resizable({ handles: 's', resize: function () { return false; } });
     $('#myGrid').resizable({ handles: 's' });
 
@@ -463,4 +323,3 @@
   </script>
 </body>
 </html>
->>>>>>> ca1cff2 (With Map2)
