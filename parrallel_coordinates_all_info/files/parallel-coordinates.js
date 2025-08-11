@@ -40,7 +40,7 @@
       // Excludes axis from diagram
       x.domain(dimensions = d3.keys(myData[0]).filter(function(d) {
 
-        var excludes = ["AMSAssetRef", "LatitudeLongitude"];  
+        var excludes = ["AMSAssetRef", "Latitude", "Longitude"];  
         var ex = d != "id" && (excludes.indexOf(d) < 0);
 
         // ordinal categories
