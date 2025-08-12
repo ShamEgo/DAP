@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+  <title>parrallel_coordinates_all_info</title>
+
+  <!-- Original libs -->
+  <script type="text/javascript" src="files/d3.js"></script>
+  <script type="text/javascript" src="files/d3_002.js"></script>
+  <script type="text/javascript" src="files/d3_003.js"></script>
+  <script type="text/javascript" src="files/parallel-coordinates.js"></script>
+
+  <script type="text/javascript" src="files/jquery_002.js"></script>
+  <script type="text/javascript" src="files/underscore.js"></script>
+  <script type="text/javascript" src="files/backbone.js"></script>
+
+  <script src="files/jquery-ui-1.js"></script>
+  <script type="text/javascript" src="files/filter.js"></script>
+
+  <!-- SlickGrid -->
+  <link rel="stylesheet" href="files/slick.css" type="text/css" media="screen" charset="utf-8">
+  <script src="files/jquery.js"></script>
+  <script src="files/slick_003.js"></script>
+  <script src="files/slick_004.js"></script>
+  <script src="files/slick_002.js"></script>
+  <script src="files/slick.js"></script>
+  <script src="files/grid.js"></script>
+  <script src="files/pie.js"></script>
+  <script src="files/options.js"></script>
+  <script src="files/data.js"></script>
+  <link rel="stylesheet" href="files/style.css" type="text/css" charset="utf-8">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Layout -->
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .layout {
+      display: grid;
+      grid-template-columns: 40vw 1fr; /* left 40% map | right content */
+      grid-template-rows: 100vh;
+      width: 100vw; height: 100vh; overflow: hidden;
+    }
+    #left { height: 100vh; }
+    #map  { width: 100%; height: 100%; }
+
+    /* Right pane: widgets on top, viz row fills remaining height */
+    #right { height: 100vh; overflow: hidden; padding: 0 8px; }
+    #main  { height: 100%; display: grid; grid-template-rows: auto 1fr; }
+
+    /* Two columns: parallel (left) | rows grid (right, wider) */
+    #vizRow {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr; /* rows pane wider than parallel */
+      gap: 12px;
+      align-items: stretch;
+      height: 100%;
+      min-height: 0;
+    }
+
+    #parallel, #myGrid { height: 100%; width: 100%; min-height: 0; }
+
+    /* Keep your inline SlickGrid styles */
+    .slickgrid_108761 .slick-header-column { left: 1000px; }
+    .slickgrid_108761 .slick-top-panel { height:25px; }
+    .slickgrid_108761 .slick-headerrow-columns { height:25px; }
+    .slickgrid_108761 .slick-cell { height:22px; }
+    .slickgrid_108761 .slick-row { width:1620px; height:25px; }
+    .slickgrid_108761 .lr { float:none; position:absolute; }
+    .slickgrid_108761 .l0 { left: 0px; }
+    .slickgrid_108761 .r0 { right: 1300px; }
+    .slickgrid_108761 .l1 { left: 320px; }
+    .slickgrid_108761 .r1 { right: 1120px; }
+    .slickgrid_108761 .l2 { left: 500px; }
+    .slickgrid_108761 .r2 { right: 1040px; }
+    .slickgrid_108761 .l3 { left: 580px; }
+    .slickgrid_108761 .r3 { right: 960px; }
+    .slickgrid_108761 .l4 { left: 660px; }
+    .slickgrid_108761 .r4 { right: 880px; }
+    .slickgrid_108761 .l5 { left: 740px; }
+    .slickgrid_108761 .r5 { right: 800px; }
+    .slickgrid_108761 .l6 { left: 820px; }
+    .slickgrid_108761 .r6 { right: 720px; }
+    .slickgrid_108761 .l7 { left: 900px; }
+    .slickgrid_108761 .r7 { right: 640px; }
+    .slickgrid_108761 .l8 { left: 980px; }
+    .slickgrid_108761 .r8 { right: 560px; }
+    .slickgrid_108761 .l9 { left: 1060px; }
+    .slickgrid_108761 .r9 { right: 480px; }
+    .slickgrid_108761 .l10 { left: 1140px; }
+    .slickgrid_108761 .r10 { right: 400px; }
+    .slickgrid_108761 .l11 { left: 1220px; }
+    .slickgrid_108761 .r11 { right: 320px; }
+    .slickgrid_108761 .l12 { left: 1300px; }
+    .slickgrid_108761 .r12 { right: 240px; }
+    .slickgrid_108761 .l13 { left: 1380px; }
+    .slickgrid_108761 .r13 { right: 160px; }
+    .slickgrid_108761 .l14 { left: 1460px; }
+    .slickgrid_108761 .r14 { right: 80px; }
+    .slickgrid_108761 .l15 { left: 1540px; }
+    .slickgrid_108761 .r15 { right: 0px; }
+
+    /* (Optional hard hide) If any attribution sneaks in, this hides it */
+    .leaflet-control-attribution { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside id="left">
+      <div id="map"></div>
+    </aside>
+
+    <section id="right">
+      <div id="main">
+        <div class="widgets">
+          <div id="totals" class="widget right">Total Selected<br><svg height="80" width="100"></svg></div>
+          <div id="pie" class="widget right">Group Breakdown<br><svg height="80" width="100"></svg></div>
+          <a href="#" id="export_selected" class="button green filter_control">Export</a>
+          <a href="#" id="remove_selected" class="button red filter_control">Remove</a>
+          <a href="#" id="keep_selected" class="button green filter_control">Keep</a>
+          <div id="pager" class="info"></div>
+          <div id="legend"></div>
+        </div>
+
+        <!-- Side-by-side row: parallel (left) | rows (right) -->
+        <div id="vizRow">
+          <div id="parallel"></div>
+          <div id="myGrid"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="text/javascript">
+  $(function() {
+
+    var dimensions = new Filter();
+    var highlighter = new Selector();
+
+    dimensions.set({data: dataJSON});
+
+    var columns = _(dataJSON[0]).keys();
+    var groups = ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"];;
+    var colors = {"ACT": "#5af0ec", "NSW": "#5db82a", "NT": "#39030f", "QLD": "#9c04b9", "SA": "#3f48f0", "TAS": "#6bcb9d", "VIC": "#937572", "WA": "#fdd8d2"};;
+
+    /* ===== Force Paired 12 palette for all groups ===== */
+    (function applyPaired12(){
+      var palette = ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99",
+                     "#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a",
+                     "#ffff99","#b15928"];
+      var remap = {};
+      for (var i=0; i<groups.length; i++) {
+        remap[groups[i]] = palette[i % palette.length];
+      }
+      colors = remap; // override injected {"ACT": "#5af0ec", "NSW": "#5db82a", "NT": "#39030f", "QLD": "#9c04b9", "SA": "#3f48f0", "TAS": "#6bcb9d", "VIC": "#937572", "WA": "#fdd8d2"};
+    })();
+    /* ================================================ */
+
+    _(groups).each(function(group) {
+      $('#legend').append("<div class='item'><div class='color' style='background: " + colors[group] + "';></div><div class='key'>" + group + "</div></div>");
+    });
+
+    var pc = parallel(dimensions, colors);
+
+    // ---------- MAP (dark, no attribution control) ----------
+    var LAT_FIELD, LON_FIELD;
+    (function guessLatLon(){
+      var keys = _.keys(dataJSON[0] || {});
+      var latKeys = ["Latitude","LAT","Lat","lat"];
+      var lonKeys = ["Longitude","LONGITUDE","Long","Lng","lon","lng"];
+      LAT_FIELD = _.find(latKeys, function(k){ return _.contains(keys, k); }) || "Latitude";
+      LON_FIELD = _.find(lonKeys, function(k){ return _.contains(keys, k); }) || "Longitude";
+    })();
+
+    // Disable attribution control at the map level
+    var map = L.map('map', { zoomControl: true, preferCanvas: true, attributionControl: false });
+
+    // Add tiles WITHOUT attribution text (note: ensure your license permits this)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+    // Fix the initial view once; we won't change it (no auto-pan/zoom)
+    map.setView([-25.2744, 133.7751], 4);
+
+    var markerLayer = L.layerGroup().addTo(map);
+
+    function parseNum(x){ var v = Number(x); return isFinite(v) ? v : null; }
+    function validLatLon(lat, lon){
+      return lat !== null && lon !== null && lat <= 90 && lat >= -90 && lon <= 180 && lon >= -180;
+    }
+
+    function updateMap(rows){
+      markerLayer.clearLayers();
+      if (!rows || !rows.length) return;
+
+      for (var i=0; i<rows.length; i++){
+        var r = rows[i];
+        var lat = parseNum(r[LAT_FIELD]);
+        var lon = parseNum(r[LON_FIELD]);
+        if (!validLatLon(lat, lon)) continue;
+
+        var grp = r['State'];
+        var color = colors[grp] || '#58a6ff';
+
+        L.circleMarker([lat, lon], {
+          radius: 6,
+          color: color, weight: 2,
+          fillColor: color, fillOpacity: 0.55
+        })
+        .bindPopup(
+          '<div style="min-width:200px">' +
+          '<div><b>AMSAssetRef:</b> ' + _.escape(String(r.AMSAssetRef || '')) + '</div>' +
+          '<div><b>State:</b> ' + _.escape(String(r.State || '')) + '</div>' +
+          '<div><b>StructureClassCode:</b> ' + _.escape(String(r.StructureClassCode || '')) + '</div>' +
+          '<div><b>CorrosionRegionType:</b> ' + _.escape(String(r.CorrosionRegionType || '')) + '</div>' +
+          '</div>',
+          { autoPan: false }   // prevent popup from panning map
+        )
+        .addTo(markerLayer);
+      }
+      // No fitBounds / setView → no auto panning or zooming
+    }
+
+    var updateMapDebounced = _.debounce(updateMap, 120);
+
+    // Initial draw
+    updateMap(dimensions.get('filtered') || dimensions.get('data') || []);
+    // ---------- END MAP ----------
+
+    var pie = piegroups(dataJSON, groups, colors, 'State');
+    var totals = pietotals(['in', 'out'], [_(dataJSON).size(), 0]);
+
+    // Size SlickGrid to its own pane (not the body)
+    var slicky = new grid({
+      model: dimensions,
+      selector: highlighter,
+      width: $('#myGrid').width(),
+      columns: columns
+    });
+
+    // Ensure both panels fill their grid cells
+    $('#parallel').css({ height: '100%', width: '100%' });
+    $('#myGrid').css({ height: '100%', width: '100%' });
+
+    slicky.update();
+    pc.render();
+
+    // Re-render parallel on window resize so the SVG recalculates
+    $(window).on('resize', function(){
+      pc.render();
+    });
+
+    // === Hook events to debounced map updates (no panning/zooming) ===
+    dimensions.bind('change:filtered', function() {
+      var data = dimensions.get('data');
+      var filtered = dimensions.get('filtered');
+      var data_size = _(data).size();
+      var filtered_size = _(filtered).size();
+      pie.update(filtered);
+      totals.update([filtered_size, data_size - filtered_size]);
+
+      updateMapDebounced(filtered);
+
+      var opacity = _([2/Math.pow(filtered_size,0.37), 100]).min();
+      $('#line_opacity').val(opacity).change();
+    });
+
+    highlighter.bind('change:selected', function() {
+      var highlighted = this.get('selected');
+      pc.highlight(highlighted);
+
+      // Keep full filtered set on the map (don’t focus on one)
+      var rows = dimensions.get('filtered') || [];
+      updateMapDebounced(rows);
+    });
+
+    $('#remove_selected').click(function() {
+      dimensions.outliers();
+      pc.update(dimensions.get('data'));
+      pc.render();
+      dimensions.trigger('change:filtered');
+      return false;
+    });
+
+    $('#keep_selected').click(function() {
+      dimensions.inliers();
+      pc.update(dimensions.get('data'));
+      pc.render();
+      dimensions.trigger('change:filtered');
+      return false;
+    });
+
+    $('#export_selected').click(function() {
+      var data = dimensions.get('filtered');
+      var keys = _.keys(data[0]);
+      var csv = _(keys).map(function(d) { return '"' + addslashes(d) + '"'; }).join(",");
+      _(data).each(function(row) {
+        csv += "\n";
+        csv += _(keys).map(function(k) {
+          var val = row[k];
+          if (_.isString(val)) return '"' + addslashes(val) + '"';
+          if (_.isNumber(val)) return val;
+          if (_.isNull(val)) return "";
+        }).join(",");
+      });
+      var uriContent = "data:application/octet-stream," + encodeURIComponent(csv);
+      var myWindow = window.open(uriContent, "Nutrient CSV");
+      myWindow.focus();
+      return false;
+    });
+
+    $('#line_opacity').change(function() {
+      var val = $(this).val();
+      $('#parallel .foreground path').css('stroke-opacity', val.toString());
+      $('#opacity_level').html((Math.round(val*10000)/100) + "%");
+    });
+
+    $('#parallel').resize(function() {
+      pc.render();
+      var val = $('#line_opacity').val();
+      $('#parallel .foreground path').css('stroke-opacity', val.toString());
+    });
+
+    $('#parallel').resizable({ handles: 's', resize: function () { return false; } });
+    $('#myGrid').resizable({ handles: 's' });
+
+    function addslashes( str ) {
+      return (str+'')
+        .replace(/\"/g, "\"\"")
+        .replace(/\0/g, "\\0");
+    }
+
+  });
+  </script>
+</body>
+</html>
