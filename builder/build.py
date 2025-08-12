@@ -8,6 +8,7 @@ from pathlib import Path
 # ── Locate script & template dirs ───────────────────────────────────────────────
 SCRIPT_DIR   = Path(__file__).parent
 TEMPLATE_DIR = SCRIPT_DIR / 'template'
+print(TEMPLATE_DIR)
 
 # Command-line arguments
 csvName     = 'parallel_coord.csv'

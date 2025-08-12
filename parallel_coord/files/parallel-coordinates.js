@@ -38,42 +38,6 @@
 
       // Extract the list of dimensions and create a scale for each.
       // Excludes axis from diagram
-<<<<<<< HEAD
-      dimensions = DIMENSIONS;    // injected by build.py as ["State","StructureClassCode","Height","CorrosionRegionType"]
-      x.domain(dimensions);
-      
-      dimensions.forEach(function(d) {
-        // special case for CorrosionRegionType:
-        if (d === "CorrosionRegionType") {
-          y[d] = d3.scale.ordinal()
-                  .domain([
-                    "Very low",
-                    "Low",
-                    "Medium",
-                    "High",
-                    "Very High",
-                    "Inland tropical"
-                  ])
-                  .rangePoints([h, 0]);
-        }
-        // all your other ordinal columns (use the injected ORDINALS array):
-        else if (ORDINALS.indexOf(d) >= 0) {
-          y[d] = d3.scale.ordinal()
-                  .domain(
-                    myData
-                      .map(p => p[d])
-                      .filter((v, i, a) => a.indexOf(v) === i)
-                  )
-                  .rangePoints([h, 0]);
-        }
-        // linear (numeric) columns:
-        else {
-          y[d] = d3.scale.linear()
-                  .domain(d3.extent(myData, p => +p[d]))
-                  .range([h, 0]);
-        }
-      });
-=======
       x.domain(dimensions = d3.keys(myData[0]).filter(function(d) {
 
         var excludes = [];  
@@ -93,7 +57,6 @@
           .range([h, 0]));
       }));
       
->>>>>>> ca1cff2 (With Map2)
       // Add grey background lines for context.
       background = svg.append("svg:g")
           .attr("class", "background")

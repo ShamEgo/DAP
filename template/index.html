@@ -30,29 +30,39 @@
   <script src="files/data.js"></script>
   <link rel="stylesheet" href="files/style.css" type="text/css" charset="utf-8">
 
-  <!-- Leaflet (dark map) -->
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Two-pane layout: fixed map left, content right -->
+  <!-- Layout -->
   <style>
     html, body { height: 100%; margin: 0; }
     .layout {
       display: grid;
-      grid-template-columns: 40vw 1fr; /* left 40% of viewport */
-      grid-template-rows: 100vh;       /* full window height */
+      grid-template-columns: 40vw 1fr; /* left 40% map | right content */
+      grid-template-rows: 100vh;
       width: 100vw; height: 100vh; overflow: hidden;
     }
     #left { height: 100vh; }
-    #map  { width: 100%; height: 100%; } /* fills left pane; no JS resize */
+    #map  { width: 100%; height: 100%; }
 
-    /* Right pane scrolls independently */
-    #right { height: 100vh; overflow: auto; padding: 0 8px; }
+    /* Right pane: widgets on top, viz row fills remaining height */
+    #right { height: 100vh; overflow: hidden; padding: 0 8px; }
+    #main  { height: 100%; display: grid; grid-template-rows: auto 1fr; }
 
-    /* Make the parallel canvas reasonably tall by default */
-    #parallel { min-height: 420px; }
+    /* Two columns: parallel (left) | rows grid (right, wider) */
+    #vizRow {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr; /* rows pane wider than parallel */
+      gap: 12px;
+      align-items: stretch;
+      height: 100%;
+      min-height: 0;
+    }
 
-    /* (kept from your inline SlickGrid style) */
+    #parallel, #myGrid { height: 100%; width: 100%; min-height: 0; }
+
+    /* Keep your inline SlickGrid styles */
     .slickgrid_108761 .slick-header-column { left: 1000px; }
     .slickgrid_108761 .slick-top-panel { height:25px; }
     .slickgrid_108761 .slick-headerrow-columns { height:25px; }
@@ -91,6 +101,9 @@
     .slickgrid_108761 .r14 { right: 80px; }
     .slickgrid_108761 .l15 { left: 1540px; }
     .slickgrid_108761 .r15 { right: 0px; }
+
+    /* (Optional hard hide) If any attribution sneaks in, this hides it */
+    .leaflet-control-attribution { display: none !important; }
   </style>
 </head>
 
@@ -112,8 +125,11 @@
           <div id="legend"></div>
         </div>
 
-        <div id="parallel"></div>
-        <div id="myGrid"></div>
+        <!-- Side-by-side row: parallel (left) | rows (right) -->
+        <div id="vizRow">
+          <div id="parallel"></div>
+          <div id="myGrid"></div>
+        </div>
       </div>
     </section>
   </div>
@@ -127,10 +143,21 @@
     dimensions.set({data: dataJSON});
 
     var columns = _(dataJSON[0]).keys();
-    var axes = columns;
-
     var groups = GROUPS;
     var colors = COLORS;
+
+    /* ===== Force Paired 12 palette for all groups ===== */
+    (function applyPaired12(){
+      var palette = ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99",
+                     "#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a",
+                     "#ffff99","#b15928"];
+      var remap = {};
+      for (var i=0; i<groups.length; i++) {
+        remap[groups[i]] = palette[i % palette.length];
+      }
+      colors = remap; // override injected COLORS
+    })();
+    /* ================================================ */
 
     _(groups).each(function(group) {
       $('#legend').append("<div class='item'><div class='color' style='background: " + colors[group] + "';></div><div class='key'>" + group + "</div></div>");
@@ -138,7 +165,7 @@
 
     var pc = parallel(dimensions, colors);
 
-    // ---------- MAP INTEGRATION (Leaflet) — debounced only ----------
+    // ---------- MAP (dark, no attribution control) ----------
     var LAT_FIELD, LON_FIELD;
     (function guessLatLon(){
       var keys = _.keys(dataJSON[0] || {});
@@ -148,11 +175,14 @@
       LON_FIELD = _.find(lonKeys, function(k){ return _.contains(keys, k); }) || "Longitude";
     })();
 
-    // prefer Canvas for speed; dark tiles
-    var map = L.map('map', { zoomControl: true, preferCanvas: true });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CartoDB'
-    }).addTo(map);
+    // Disable attribution control at the map level
+    var map = L.map('map', { zoomControl: true, preferCanvas: true, attributionControl: false });
+
+    // Add tiles WITHOUT attribution text (note: ensure your license permits this)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+    // Fix the initial view once; we won't change it (no auto-pan/zoom)
+    map.setView([-25.2744, 133.7751], 4);
 
     var markerLayer = L.layerGroup().addTo(map);
 
@@ -163,13 +193,8 @@
 
     function updateMap(rows){
       markerLayer.clearLayers();
+      if (!rows || !rows.length) return;
 
-      if (!rows || !rows.length){
-        map.setView([-25.2744, 133.7751], 4); // AU default
-        return;
-      }
-
-      var bounds = [];
       for (var i=0; i<rows.length; i++){
         var r = rows[i];
         var lat = parseNum(r[LAT_FIELD]);
@@ -184,56 +209,50 @@
           color: color, weight: 2,
           fillColor: color, fillOpacity: 0.55
         })
-        // comment out popup for maximum speed on huge sets
         .bindPopup(
           '<div style="min-width:200px">' +
           '<div><b>AMSAssetRef:</b> ' + _.escape(String(r.AMSAssetRef || '')) + '</div>' +
           '<div><b>State:</b> ' + _.escape(String(r.State || '')) + '</div>' +
           '<div><b>StructureClassCode:</b> ' + _.escape(String(r.StructureClassCode || '')) + '</div>' +
           '<div><b>CorrosionRegionType:</b> ' + _.escape(String(r.CorrosionRegionType || '')) + '</div>' +
-          '</div>'
+          '</div>',
+          { autoPan: false }   // prevent popup from panning map
         )
         .addTo(markerLayer);
-
-        bounds.push([lat, lon]);
       }
-
-      if (bounds.length) map.fitBounds(bounds, { padding: [20,20] });
-      else map.setView([-25.2744, 133.7751], 4);
+      // No fitBounds / setView → no auto panning or zooming
     }
 
-    // Debounce heavy redraws (brushing fires rapidly)
     var updateMapDebounced = _.debounce(updateMap, 120);
 
     // Initial draw
     updateMap(dimensions.get('filtered') || dimensions.get('data') || []);
-    // ---------- END MAP INTEGRATION ----------
+    // ---------- END MAP ----------
 
     var pie = piegroups(dataJSON, groups, colors, 'GROUP');
-    var totals = pietotals(
-      ['in', 'out'],
-      [_(dataJSON).size(), 0]
-    );
+    var totals = pietotals(['in', 'out'], [_(dataJSON).size(), 0]);
 
+    // Size SlickGrid to its own pane (not the body)
     var slicky = new grid({
       model: dimensions,
       selector: highlighter,
-      width: $('body').width(),
+      width: $('#myGrid').width(),
       columns: columns
     });
 
-    // vertical full screen (width constrained by right pane)
-    var parallel_height = $(window).height() - 64 - 12 - 120 - 320;
-    if (parallel_height < 120) parallel_height = 120; // min height
-    $('#parallel').css({
-      height: parallel_height + 'px',
-      width: '100%'
-    });
+    // Ensure both panels fill their grid cells
+    $('#parallel').css({ height: '100%', width: '100%' });
+    $('#myGrid').css({ height: '100%', width: '100%' });
 
     slicky.update();
     pc.render();
 
-    // === Hook existing events to debounced map updates ===
+    // Re-render parallel on window resize so the SVG recalculates
+    $(window).on('resize', function(){
+      pc.render();
+    });
+
+    // === Hook events to debounced map updates (no panning/zooming) ===
     dimensions.bind('change:filtered', function() {
       var data = dimensions.get('data');
       var filtered = dimensions.get('filtered');
@@ -242,7 +261,6 @@
       pie.update(filtered);
       totals.update([filtered_size, data_size - filtered_size]);
 
-      // Debounced map redraw
       updateMapDebounced(filtered);
 
       var opacity = _([2/Math.pow(filtered_size,0.37), 100]).min();
@@ -253,13 +271,9 @@
       var highlighted = this.get('selected');
       pc.highlight(highlighted);
 
-      // Show selected point on map, else all filtered
+      // Keep full filtered set on the map (don’t focus on one)
       var rows = dimensions.get('filtered') || [];
-      if (highlighted == null || highlighted === undefined || !rows[highlighted]) {
-        updateMapDebounced(rows);
-      } else {
-        updateMapDebounced([rows[highlighted]]);
-      }
+      updateMapDebounced(rows);
     });
 
     $('#remove_selected').click(function() {
@@ -303,7 +317,6 @@
       $('#opacity_level').html((Math.round(val*10000)/100) + "%");
     });
 
-    // Keep one resize handler for #parallel (no map resizing)
     $('#parallel').resize(function() {
       pc.render();
       var val = $('#line_opacity').val();
