@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+  <title>Public</title>
+  
+  <!-- libs -->
+  <!-- pixijs -->
+  <script type="text/javascript" src="files/libs/pixi.js/v7.2.4/pixi.min.js"></script>
+
+  <!-- d3 -->
+  <script type="text/javascript" src="files/libs/d3.v7.min.js"></script>
+
+  <!-- d3 curve interpolation helper -->
+  <script src="files/d3-interpolate-curve.min.js"></script>
+
+  <!-- jquery -->
+  <script type="text/javascript" src="files/libs/jquery-3.7.1.min.js"></script>
+
+  <!-- parallel coordinates implementation -->
+  <script type="text/javascript" src="files/parallel-coordinates.js"></script>
+
+  <!-- underscore & backbone -->
+  <script type="text/javascript" src="files/libs/underscore/1.13.7/underscore-umd-min.js"></script>
+  <script type="text/javascript" src="files/libs/backbone/1.6.0/backbone-min.js"></script>
+
+  <!-- jquery-ui -->
+  <script src="files/libs/jqueryui/1.14.1/jquery-ui.min.js"></script>
+  
+  <!-- backbone 'filter' sample -->
+  <script type="text/javascript" src="files/filter.js"></script>
+  
+  <!-- SlickGrid -->
+  <link rel="stylesheet" href="files/libs/slickgrid/5.15.2/css/slick.grid.css" type="text/css" media="screen" charset="utf-8">
+  <script src="files/libs/Sortable/1.15.6/Sortable.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.core.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.interactions.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.grid.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/controls/slick.pager.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.dataview.min.js"></script>
+  
+  <!-- grid example -->
+  <script src="files/grid.js"></script>
+
+  <!-- d3 pie graph -->
+  <script src="files/pie.js"></script>
+
+  <!-- options functions -->
+  <script src="files/options.js"></script>
+
+  <!-- data to visualise -->
+  <script src="files/data.js"></script>
+
+  <!-- css styling -->
+  <link rel="stylesheet" href="files/style.css" type="text/css" charset="utf-8">
+
+  <!-- Leaflet (for map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    /* Two panes across: left = map, right = your existing content */
+    .layout {
+      display: grid;
+      grid-template-columns: 40vw 1fr;  /* map | content */
+      grid-auto-rows: auto;
+      width: 100vw; 
+      min-height: 100vh;
+    }
+    /* Map area */
+    #map { width: 100%; height: 100%; }
+    .map-wrapper { min-height: calc(100vh - 0px); }
+
+    /* Right content stays as you had it */
+    #main { padding: 0 8px; }
+
+    /* Make the parallel/grid sit side-by-side (you already have .parallel-container & .grid-container) */
+    #container {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr; /* grid a bit wider */
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    /* Let child panels expand to their cells */
+    .parallel-container, .grid-container, #parallel, #myGrid {
+      width: 100%;
+      height: 100%;
+      min-height: 0; /* important so children can shrink within the grid */
+    }
+
+    /* Hide Leaflet attribution if any */
+    .leaflet-control-attribution { display: none !important; }
+  </style>
+</head>
+
+<body>
+<div id="nav">
+  <script type="module">
+    // const app = new PIXI.Application({ width: 1200, height: 400 });
+  </script>
+  <h1>Public - Parallel Coordinates</h1>
+  <div class="widget right toggle">
+	  <input type="range" min="0" max="1" value="0.2" step="0.01" name="power" list="powers" id="line_opacity" type="range">
+   <br>
+	  Opacity: <span id="opacity_level">20%</span>
+	</div>
+  <div><a href="#" id="force_tb" class="right toggle">Force Top/Bottom</a></div>
+  <div><a href="#" id="inverted" class="right toggle">Dark</a></div>
+  <div><a href="#" id="no_ticks" class="right toggle">Hide Ticks</a></div>
+  <p class="intro left clear">
+    Public
+  </p>
+</div>
+
+<!-- NEW: layout wrapper with a map on the left -->
+<div class="layout">
+  <div class="map-wrapper">
+    <div id="map"></div>
+  </div>
+
+  <div id="main">
+    <div class="widgets">
+      <div id="totals" class="widget right">Total Selected<br></div>
+      <div id="pie" class="widget right">Group Breakdown<br></div>
+      <a href="#" id="export_selected" class="button green filter_control">Export</a>
+      <a href="#" id="remove_selected" class="button red filter_control">Remove</a>
+      <a href="#" id="keep_selected" class="button green filter_control">Keep</a>
+      <div id="pager" class="info"></div>
+      <div id="legend"></div>
+    </div>
+
+    <div id="container">
+      <div class="parallel-container">
+        <div id="parallel"></div>
+      </div>
+      <div class="grid-container">
+        <div id="myGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  var dimensions = new Filter();
+  var highlighter = new Selector();
+  dimensions.set({data: dataJSON });
+
+  var columns = _(dataJSON[0]).keys();
+  var groups  = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT", "OTHER"];;
+  var colors  = {"NSW": "#c8cd18", "VIC": "#a715aa", "QLD": "#db5d7c", "WA": "#68f711", "SA": "#e8ee92", "TAS": "#fe714a", "NT": "#8dc4b4", "ACT": "#401512", "OTHER": "#2f0b4c"};;
+
+  /* ===== Force Paired 12 palette for all groups (same as previous) ===== */
+  (function applyPaired12(){
+    var palette = ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99",
+                   "#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a",
+                   "#ffff99","#b15928"];
+    var remap = {};
+    for (var i=0; i<groups.length; i++) {
+      remap[groups[i]] = palette[i % palette.length];
+    }
+    colors = remap; // override injected {"NSW": "#c8cd18", "VIC": "#a715aa", "QLD": "#db5d7c", "WA": "#68f711", "SA": "#e8ee92", "TAS": "#fe714a", "NT": "#8dc4b4", "ACT": "#401512", "OTHER": "#2f0b4c"};
+  })();
+  /* ==================================================================== */
+
+  _(groups).each(function(group) {
+    $('#legend').append(
+      "<div class='item'><div class='color' style='background:" + colors[group] + "'></div><div class='key'>" + group + "</div></div>"
+    );
+  });
+
+  var pc   = parallel(dimensions, colors);
+  var pie  = piegroups(dataJSON, groups, colors, 'State');
+  var totals = pietotals(['in', 'out'], [_(dataJSON).size(), 0]);
+
+  var slicky = new grid({
+    model: dimensions,
+    selector: highlighter,
+    columns: columns,
+    forceFitColumns: false
+  });
+
+  slicky.update();
+  pc.render();
+
+  const gridContainer     = document.querySelector('.grid-container');
+  const parallelContainer = document.querySelector('.parallel-container');
+
+  // Keep grid canvas sized to its container
+  const gridResizeObserver = new ResizeObserver(() => {
+    const gridEl = document.getElementById('myGrid');
+    gridEl.style.width  = gridContainer.clientWidth + 'px';
+    gridEl.style.height = gridContainer.clientHeight + 'px';
+    slicky.grid.resizeCanvas();
+  });
+  gridResizeObserver.observe(gridContainer);
+
+  // Keep grid height in sync with parallel container height
+  const observer = new MutationObserver(() => {
+    const gridEl = document.getElementById('myGrid');
+    gridEl.style.width  = gridContainer.clientWidth + 'px';
+    gridEl.style.height = parallelContainer.clientHeight + 'px';
+    slicky.grid.resizeCanvas();
+  });
+  observer.observe(document.getElementById('myGrid'), {
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: ["class", "style", "float"],
+  });
+
+  /* =================== MAP INTEGRATION (Leaflet) =================== */
+  // guess lat/lon column names
+  var LAT_FIELD, LON_FIELD;
+  (function guessLatLon(){
+    var keys = _.keys(dataJSON[0] || {});
+    var latKeys = ["Latitude","LAT","Lat","lat"];
+    var lonKeys = ["Longitude","LONGITUDE","Long","Lng","lon","lng"];
+    LAT_FIELD = _.find(latKeys, function(k){ return _.contains(keys, k); }) || "Latitude";
+    LON_FIELD = _.find(lonKeys, function(k){ return _.contains(keys, k); }) || "Longitude";
+  })();
+
+  // dark basemap, fixed view, no attribution
+  var map = L.map('map', { zoomControl: true, preferCanvas: true, attributionControl: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+  map.setView([-25.2744, 133.7751], 4); // AU default; do not change after this
+
+  var markerLayer = L.layerGroup().addTo(map);
+
+  function parseNum(x){ var v = Number(x); return isFinite(v) ? v : null; }
+  function validLatLon(lat, lon){
+    return lat !== null && lon !== null && lat <= 90 && lat >= -90 && lon <= 180 && lon >= -180;
+  }
+
+  function updateMap(rows){
+    markerLayer.clearLayers();
+    if (!rows || !rows.length) return;
+
+    for (var i=0; i<rows.length; i++){
+      var r = rows[i];
+      var lat = parseNum(r[LAT_FIELD]);
+      var lon = parseNum(r[LON_FIELD]);
+      if (!validLatLon(lat, lon)) continue;
+
+      var grp = r['State'];                 // colour by your group field
+      var color = colors[grp] || '#58a6ff';
+
+      L.circleMarker([lat, lon], {
+        radius: 6,
+        color: color, weight: 2,
+        fillColor: color, fillOpacity: 0.55
+      })
+      .bindPopup(
+        '<div style="min-width:200px">' +
+          '<div><b>AMSAssetRef:</b> ' + _.escape(String(r.AMSAssetRef || '')) + '</div>' +
+          '<div><b>State:</b> ' + _.escape(String(r.State || '')) + '</div>' +
+          '<div><b>StructureClassCode:</b> ' + _.escape(String(r.StructureClassCode || '')) + '</div>' +
+          '<div><b>CorrosionRegionType:</b> ' + _.escape(String(r.CorrosionRegionType || '')) + '</div>' +
+        '</div>',
+        { autoPan: false }   // do not move the map for popups
+      )
+      .addTo(markerLayer);
+    }
+    // IMPORTANT: no map.fitBounds() or map.setView() → no auto panning/zooming
+  }
+
+  // Debounce heavy redraws (brushing fires rapidly)
+  var updateMapDebounced = _.debounce(updateMap, 120);
+  // Initial map draw
+  updateMap(dimensions.get('filtered') || dimensions.get('data') || []);
+  /* ================= END MAP INTEGRATION ================= */
+
+  // === React to brushing/filtering and selection ===
+  dimensions.bind('change:filtered', function() {
+    var data = dimensions.get('data');
+    var filtered = dimensions.get('filtered');
+    var data_size = _(data).size();
+    var filtered_size = _(filtered).size();
+    pie.update(filtered);
+    totals.update([filtered_size, data_size - filtered_size]);
+
+    // Debounced map redraw (keeps fixed view)
+    updateMapDebounced(filtered);
+
+    var opacity = _([2/Math.pow(filtered_size,0.37), 100]).min();
+    $('#line_opacity').val(opacity).change();
+  });
+  

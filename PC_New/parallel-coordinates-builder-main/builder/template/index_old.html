@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+  <title>_TITLE_</title>
+  
+  <!-- libs -->
+  <!-- pixijs -->
+  <script type="text/javascript" src="files/libs/pixi.js/v7.2.4/pixi.min.js"></script>
+
+  <!-- d3 -->
+  <script type="text/javascript" src="files/libs/d3.v7.min.js"></script>
+
+  <!-- TODO: extra functions for d3 to interpolate curves for smooth drawing -->
+  <!-- https://github.com/jamesleesaunders/d3-interpolate-curve -->
+  <script src="files/d3-interpolate-curve.min.js"></script>
+
+  <!-- jquery (possible to remove this dependency?) -->
+  <script type="text/javascript" src="files/libs/jquery-3.7.1.min.js"></script>
+
+  <!-- parallel coordinates implementation -->
+  <script type="text/javascript" src="files/parallel-coordinates.js"></script>
+  <!-- <script type="text/javascript" src="files/parallel-coordinates-veggie.updated.js"></script> -->
+
+  <!-- underscore (required by backbone) -->
+  <script type="text/javascript" src="files/libs/underscore/1.13.7/underscore-umd-min.js"></script>
+  <!-- backbone -->
+  <script type="text/javascript" src="files/libs/backbone/1.6.0/backbone-min.js"></script>
+
+  <!-- jquery-ui -->
+  <script src="files/libs/jqueryui/1.14.1/jquery-ui.min.js"></script>
+  
+  <!-- backbone 'filter' sample -->
+  <script type="text/javascript" src="files/filter.js"></script>
+  
+  <!-- SlickGrid -->
+  <!-- css -->
+  <link rel="stylesheet" href="files/libs/slickgrid/5.15.2/css/slick.grid.css" type="text/css" media="screen" charset="utf-8">
+
+  <!-- Sortable (required by slickgrid instead of jquery) -->
+  <script src="files/libs/Sortable/1.15.6/Sortable.min.js"></script>
+
+  <script src="files/libs/slickgrid/5.15.2/slick.core.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.interactions.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.grid.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/controls/slick.pager.min.js"></script>
+  <script src="files/libs/slickgrid/5.15.2/slick.dataview.min.js"></script>
+  
+  <!-- grid example -->
+  <script src="files/grid.js"></script>
+
+  <!-- d3 pie graph -->
+  <script src="files/pie.js"></script>
+
+  <!-- options functions -->
+  <script src="files/options.js"></script>
+
+  <!-- data to visualise -->
+  <script src="files/data.js"></script>
+  <!-- <script src="files/food-table.js"></script> -->
+
+  <!-- css styling -->
+  <link rel="stylesheet" href="files/style.css" type="text/css" charset="utf-8">
+
+</head>
+
+<body>
+<div id="nav">
+  <script type="module">
+    // const app = new PIXI.Application({ width: 1200, height: 400 });
+  </script>
+  <h1>_TITLE_ - Parallel Coordinates</h1>
+  <div class="widget right toggle">
+	  <input type="range" min="0" max="1" value="0.2" step="0.01" name="power" list="powers" id="line_opacity" type="range">
+   <br>
+	  Opacity: <span id="opacity_level">20%</span>
+	</div>
+  <div><a href="#" id="force_tb" class="right toggle">Force Top/Bottom</a></div>
+  <div><a href="#" id="inverted" class="right toggle">Dark</a></div>
+  <div><a href="#" id="no_ticks" class="right toggle">Hide Ticks</a></div>
+  <p class="intro left clear">
+    _TITLE_
+  </p>
+</div>
+<div id="main">
+  <div class="widgets">
+    <div id="totals" class="widget right">Total Selected<br></div>
+    <div id="pie" class="widget right">Group Breakdown<br></div>
+    <a href="#" id="export_selected" class="button green filter_control">Export</a>
+    <a href="#" id="remove_selected" class="button red filter_control">Remove</a>
+    <a href="#" id="keep_selected" class="button green filter_control">Keep</a>
+    <div id="pager" class="info"></div>
+    <div id="legend"></div>
+  </div>
+  <div id="container">
+    <div class="parallel-container">
+      <div id="parallel"></div>
+    </div>
+    <div class="grid-container">
+      <div id="myGrid"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  
+  $(function() {
+  
+    var dimensions = new Filter();
+    var highlighter = new Selector();
+
+    dimensions.set({data: dataJSON });
+
+    var columns = _(dataJSON[0]).keys();
+    var axes = columns;
+
+    var groups = _GROUPS_
+    var colors = _COLOURS_
+
+    _(groups).each(function(group) {
+      $('#legend').append("<div class='item'><div class='color' style='background: " + colors[group] + "';></div><div class='key'>" + group + "</div></div>");
+    });
+
+    // vertical full screen
+    // var parallel_height = $(window).height() - 64 - 12 - 120 - 320;
+    // if (parallel_height < 120) parallel_height = 120;  // min height
+    // if (parallel_height > 3840) parallel_height = 3840;  // max height
+    // // $('#parallel').css({
+    // //   height: parallel_height + 'px',
+    // //   width: $(window).width() + 'px',
+    // //   // background: 'rgba(255,255,255,0)'
+    // // })
+
+    var pc = parallel(dimensions, colors);
+    var pie = piegroups(dataJSON, groups, colors, '_GROUP_');
+    var totals = pietotals(
+      ['in', 'out'],
+      [_(dataJSON).size(), 0]
+    );
+
+    var slicky = new grid({
+      model: dimensions,
+      selector: highlighter,
+      // width: $('body').width(),
+      columns: columns,
+      forceFitColumns: false
+    });
+    
+    
+    slicky.update();
+    pc.render();
+
+    const gridContainer = document.querySelector('.grid-container');
+    const parallelContainer = document.querySelector('.parallel-container');
+
+    const gridResizeObserver = new ResizeObserver(() => {
+      console.log("grid size change")
+      const gridEl = document.getElementById('myGrid');
+      gridEl.style.width = gridContainer.clientWidth + 'px';
+      gridEl.style.height = gridContainer.clientHeight + 'px';
+      slicky.grid.resizeCanvas();
+    });
+
+
+    const observer = new MutationObserver((mutationList) => {
+      console.log("mutation change")
+      for (const mutation of mutationList) {
+        if (mutation.type === "attributes") {
+          console.log("mutation target:", mutation.target.style.height)
+          console.log(`The ${mutation.attributeName} attribute was modified from "${mutation.oldValue}" to:`);
+          console.log(document.getElementById('myGrid').style)
+        }
+      }
+      const gridEl = document.getElementById('myGrid');
+      gridEl.style.width = gridContainer.clientWidth + 'px';
+      console.log(gridContainer.clientHeight, gridContainer.height)
+      // console.log(document.getElementById('main').window.height)
+      gridEl.style.height = parallelContainer.clientHeight + 'px';
+      // blah = parallelContainer.clientHeight - 20;
+      // gridEl.style.height = blah + 'px';
+      slicky.grid.resizeCanvas();
+    });
+
+    observer.observe(document.getElementById('myGrid'), {
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: ["class", "style", "float"],
+    })
+
+
+    gridResizeObserver.observe(gridContainer);
+
+
+    dimensions.bind('change:filtered', function() {
+      var data = dimensions.get('data');
+      var filtered = dimensions.get('filtered');
+      var data_size = _(data).size();
+      var filtered_size = _(filtered).size();
+      pie.update(filtered);
+      totals.update([filtered_size, data_size - filtered_size]);
+      
+      var opacity = _([2/Math.pow(filtered_size,0.37), 100]).min();
+      $('#line_opacity').val(opacity).change();
+    });
+    
+    highlighter.bind('change:selected', function() {
+      var highlighted = this.get('selected');
+      pc.highlight(highlighted);
+    });
+
+    $('#remove_selected').on("click", function() {
+      dimensions.outliers();
+      pc.update(dimensions.get('data'));
+      pc.render();
+      dimensions.trigger('change:filtered');
+      return false;
+    });
+    
+    $('#keep_selected').on("click", function() {
+      dimensions.inliers();
+      pc.update(dimensions.get('data'));
+      pc.render();
+      dimensions.trigger('change:filtered');
+      return false;
+    });
+    
+    $('#export_selected').on("click", function() {
+      var data = dimensions.get('filtered');
+      var keys = _.keys(data[0]);
+      var csv = _(keys).map(function(d) { return '"' + addslashes(d) + '"'; }).join(",");
+      _(data).each(function(row) {
+        csv += "\n";
+        csv += _(keys).map(function(k) {
+          var val = row[k];
+          if (_.isString(val)) {
+            return '"' + addslashes(val) + '"';
+          }
+          if (_.isNumber(val)) {
+            return val;
+          }
+          if (_.isNull(val)) {
+            return "";
+          }
+        }).join(",");
+      });
+      var uriContent = "data:application/octet-stream," + encodeURIComponent(csv);
+      var myWindow = window.open(uriContent, "Nutrient CSV");
+      myWindow.focus();
+      return false;
+    });
+
+    $('#line_opacity').on("change", function() {
+      var val = $(this).val();
+      pc.opacity = val;
+      // $('#parallel .foreground path').css('stroke-opacity', val.toString());
+      $('#opacity_level').html((Math.round(val*10000)/100) + "%");
+      if (!pc.brushing) pc.render();
+    });
+    
+    // window.addEventListener('resize', pc.render());
+
+    // $('#parallel').on("resize", function() {
+    //   // vertical full screen
+    //   // pc.render();
+    //   var val = $('#line_opacity').val();
+    //   pc.opacity = val;
+    //   // $('#parallel .foreground path').css('stroke-opacity', val.toString());
+    //   // if (!pc.brushing) pc.render();
+    //   pc.render();
+
+    // });
+    
+    // $(".parallel-container").resizable({
+    $("#parallel").resizable({
+      handles: 's',
+      resize: function () { return false; }
+    });
+    
+    // $("#myGrid").resizable({
+    //   handles: 's'
+    // });
+
+    function addslashes( str ) {
+      return (str+'')
+        .replace(/\"/g, "\"\"")        // escape double quotes
+        .replace(/\0/g, "\\0");        // replace nulls with 0
+    };
+  
+  });
+
+  </script>
+  <!--
+    <p>
+     Copyright 2011, Kai Chang
+    </p>
+    <p>
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+    </p>
+    <p>
+         http://www.apache.org/licenses/LICENSE-2.0
+    </p>
+    <p>
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+	-->
+</div>
+
+
+</body></html>
